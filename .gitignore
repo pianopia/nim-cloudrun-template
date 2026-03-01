@@ -1,0 +1,12 @@
+.DS_Store
+.env
+.nimcache/
+.nimble/
+nimbledeps/
+node_modules/
+tools/bin/
+logs/
+session.db
+public/css/tailwind.css
+main
+nimmerjp
