@@ -1,7 +1,7 @@
 import basolato/view
 
 proc homePage*(baseUrl = "http://localhost:8080", siteName = "Todo App Template"): Component =
-  let ogImageUrl = baseUrl & "/ogp.png"
+  let ogImageUrl = baseUrl & "/images/ogp.svg"
   tmpli"""
     <!DOCTYPE html>
     <html lang="en">
@@ -10,14 +10,14 @@ proc homePage*(baseUrl = "http://localhost:8080", siteName = "Todo App Template"
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>$(siteName)</title>
         <meta name="description" content="Reusable Basolato + Nim Todo app starter template for Cloud Run.">
-        <link rel="icon" href="/images/favicon.png" type="image/png">
+        <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
         <meta property="og:title" content="$(siteName)">
         <meta property="og:description" content="Reusable Basolato + Nim Todo app starter template for Cloud Run.">
         <meta property="og:type" content="website">
         <meta property="og:url" content="$(baseUrl)/">
         <meta property="og:image" content="$(ogImageUrl)">
         <meta property="og:image:secure_url" content="$(ogImageUrl)">
-        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:type" content="image/svg+xml">
         <meta property="og:image:width" content="500">
         <meta property="og:image:height" content="500">
         <meta name="twitter:card" content="summary_large_image">
@@ -33,7 +33,7 @@ proc homePage*(baseUrl = "http://localhost:8080", siteName = "Todo App Template"
         <header class="border-b border-cyan-300/20 bg-slate-950/85 backdrop-blur">
           <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
             <a href="/" class="inline-flex items-center gap-2 text-lg font-black tracking-wide text-cyan-300">
-              <img src="/images/favicon.png" alt="Template icon" class="h-7 w-7">
+              <img src="/images/favicon.svg" alt="Template icon" class="h-7 w-7">
               <span>$(siteName)</span>
             </a>
             <a href="https://github.com/itsumura-h/nim-basolato" class="rounded-lg border border-slate-600 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-200 hover:border-cyan-300 hover:text-cyan-200">

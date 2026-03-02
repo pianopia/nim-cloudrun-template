@@ -4,10 +4,27 @@ import std/strutils
 import basolato/controller
 import ../views/pages/home_page
 
+proc isSafeHost(host: string): bool =
+  if host.len == 0:
+    return false
+
+  for ch in host:
+    if ch notin {'a'..'z', 'A'..'Z', '0'..'9', '.', '-', ':', '[', ']'}:
+      return false
+
+  return true
+
 proc detectBaseUrl(request: Request): string =
+  var siteUrl = getEnv("SITE_URL", "").strip()
+  while siteUrl.endsWith("/"):
+    siteUrl.setLen(siteUrl.len - 1)
+  if siteUrl.len > 0:
+    return siteUrl
+
   let headers = request.headers
-  let host: string = headers.getOrDefault("Host")
-  var proto: string = headers.getOrDefault("X-Forwarded-Proto")
+  let rawHost = headers.getOrDefault("Host").split(",")[0].strip()
+  let host = if isSafeHost(rawHost): rawHost else: ""
+  var proto = headers.getOrDefault("X-Forwarded-Proto").split(",")[0].strip().toLowerAscii()
 
   if proto.len == 0:
     let forwarded = headers.getOrDefault("Forwarded").toLowerAscii()
@@ -22,9 +39,14 @@ proc detectBaseUrl(request: Request): string =
     else:
       proto = "https"
 
-  let normalizedProto = proto.split(",")[0].strip().toLowerAscii()
+  let normalizedProto =
+    if proto == "http" or proto == "https":
+      proto
+    else:
+      "https"
+
   if host.len == 0:
-    return getEnv("SITE_URL", "http://localhost:8080")
+    return "http://localhost:8080"
 
   return normalizedProto & "://" & host
 
