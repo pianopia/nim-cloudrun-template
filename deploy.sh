@@ -15,10 +15,16 @@ PORT="${PORT:-8080}"
 SECRET_NAME="${SECRET_NAME:-${SERVICE}-secret-key}"
 SERVICE_ACCOUNT="${SERVICE_ACCOUNT:-}"
 TAILWIND_SHA256_LINUX_X64="${TAILWIND_SHA256_LINUX_X64:-}"
+TAILWIND_VERSION="${TAILWIND_VERSION:-v3.4.17}"
 BASOLATO_REF="${BASOLATO_REF:-}"
 
 : "${PROJECT_ID:?Set PROJECT_ID in .env or env vars}"
-: "${TAILWIND_SHA256_LINUX_X64:?Set TAILWIND_SHA256_LINUX_X64 in .env or env vars}"
+
+case "$TAILWIND_SHA256_LINUX_X64" in
+  ''|replace-with-*)
+    TAILWIND_SHA256_LINUX_X64="$("${ROOT_DIR}/scripts/tailwind_checksum.sh" "${TAILWIND_VERSION}" "tailwindcss-linux-x64")"
+    ;;
+esac
 
 PROJECT_NUMBER="$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')"
 if [ -z "$SERVICE_ACCOUNT" ]; then

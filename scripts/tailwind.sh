@@ -10,6 +10,21 @@ BIN_PATH="${BIN_DIR}/tailwindcss"
 TAILWIND_VERSION="${TAILWIND_VERSION:-v3.4.17}"
 TAILWIND_SHA256="${TAILWIND_SHA256:-}"
 
+resolve_checksum() {
+  local provided="$1"
+  local version="$2"
+  local asset_name="$3"
+
+  case "${provided}" in
+    ""|replace-with-*)
+      "${ROOT_DIR}/scripts/tailwind_checksum.sh" "${version}" "${asset_name}"
+      ;;
+    *)
+      echo "${provided}"
+      ;;
+  esac
+}
+
 verify_sha256() {
   local file_path="$1"
   local expected="$2"
@@ -58,10 +73,7 @@ case "${os}-${arch}" in
     ;;
 esac
 
-if [[ -z "${TAILWIND_SHA256}" ]]; then
-  echo "TAILWIND_SHA256 is required. Fetch the official checksum and set it before running this script." >&2
-  exit 1
-fi
+TAILWIND_SHA256="$(resolve_checksum "${TAILWIND_SHA256}" "${TAILWIND_VERSION}" "${asset}")"
 
 mkdir -p "${BIN_DIR}" "${ROOT_DIR}/public/css"
 
